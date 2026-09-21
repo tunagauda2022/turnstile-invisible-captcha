@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1040" viewBox="0 0 1000 1040" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c62828"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1a7f37"/></marker>
+  </defs>
+  <rect width="1000" height="1040" fill="#f9fafb"/>
+  <text x="500" y="44" text-anchor="middle" font-size="22" font-weight="700" fill="#111827">Invisible Captcha — Request Flow</text>
+
+  <!-- swimlane headers -->
+  <rect x="40" y="70" width="300" height="34" rx="8" fill="#eef2ff" stroke="#6366f1"/>
+  <text x="190" y="93" text-anchor="middle" font-size="14" font-weight="700" fill="#3730a3">Browser / React</text>
+  <rect x="350" y="70" width="300" height="34" rx="8" fill="#ecfdf5" stroke="#10b981"/>
+  <text x="500" y="93" text-anchor="middle" font-size="14" font-weight="700" fill="#065f46">Express API</text>
+  <rect x="660" y="70" width="300" height="34" rx="8" fill="#fff7ed" stroke="#f6821f"/>
+  <text x="810" y="93" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">Cloudflare Turnstile</text>
+  <line x1="345" y1="110" x2="345" y2="1000" stroke="#e5e7eb" stroke-dasharray="4 4"/>
+  <line x1="655" y1="110" x2="655" y2="1000" stroke="#e5e7eb" stroke-dasharray="4 4"/>
+
+  <!-- Start -->
+  <ellipse cx="190" cy="145" rx="90" ry="22" fill="#111827"/>
+  <text x="190" y="150" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Page loads</text>
+  <path d="M190 167 L190 195" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+
+  <!-- Widget mounts -->
+  <rect x="70" y="195" width="240" height="60" rx="8" fill="#fff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="190" y="220" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">Turnstile widget mounts (invisible)</text>
+  <text x="190" y="240" text-anchor="middle" font-size="12" fill="#6b7280">Submit button: "Verifying…" (disabled)</text>
+
+  <!-- -> challenge -->
+  <path d="M310 225 L690 225" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <text x="500" y="218" text-anchor="middle" font-size="11" fill="#374151">load api.js + run challenge (site key)</text>
+  <rect x="690" y="195" width="240" height="60" rx="8" fill="#fff" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="810" y="220" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Silent challenge</text>
+  <text x="810" y="240" text-anchor="middle" font-size="12" fill="#6b7280">No checkbox, no puzzle</text>
+
+  <!-- decision: solved? -->
+  <path d="M810 255 L810 285" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <polygon points="810,285 890,325 810,365 730,325" fill="#fff" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="810" y="330" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">Solved?</text>
+
+  <!-- no -> error -->
+  <path d="M810 365 L810 395" stroke="#c62828" stroke-width="2" marker-end="url(#r)" fill="none"/>
+  <text x="822" y="385" font-size="11" fill="#c62828">no</text>
+  <rect x="690" y="395" width="240" height="44" rx="8" fill="#fef2f2" stroke="#c62828" stroke-width="1.5"/>
+  <text x="810" y="422" text-anchor="middle" font-size="12" fill="#c62828">onError → "Captcha failed to load."</text>
+
+  <!-- yes -> token to React -->
+  <path d="M730 325 L310 325" stroke="#1a7f37" stroke-width="2" marker-end="url(#g)" fill="none"/>
+  <text x="520" y="318" text-anchor="middle" font-size="11" fill="#1a7f37">yes — onSuccess(token)</text>
+  <rect x="70" y="295" width="240" height="60" rx="8" fill="#fff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="190" y="320" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">setToken(token)</text>
+  <text x="190" y="340" text-anchor="middle" font-size="12" fill="#6b7280">Submit button: "Send" (enabled)</text>
+
+  <!-- expiry loop -->
+  <path d="M70 335 L30 335 L30 240 L70 240" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)" fill="none"/>
+  <text x="24" y="288" font-size="10" fill="#6b7280" text-anchor="middle" transform="rotate(-90 24 288)">onExpire → reset()</text>
+
+  <!-- user submits -->
+  <path d="M190 355 L190 395" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <rect x="70" y="395" width="240" height="60" rx="8" fill="#fff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="190" y="420" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">User fills form &amp; clicks Send</text>
+  <text x="190" y="440" text-anchor="middle" font-size="12" fill="#6b7280">status = submitting</text>
+
+  <!-- POST -->
+  <path d="M310 425 L380 425" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <rect x="380" y="395" width="240" height="60" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.5"/>
+  <text x="500" y="420" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">POST /api/submit</text>
+  <text x="500" y="440" text-anchor="middle" font-size="12" fill="#6b7280">{ email, message, token }</text>
+
+  <!-- token present? -->
+  <path d="M500 455 L500 485" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <polygon points="500,485 590,525 500,565 410,525" fill="#fff" stroke="#10b981" stroke-width="1.5"/>
+  <text x="500" y="530" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">token present?</text>
+
+  <!-- no -> 400 -->
+  <path d="M410 525 L310 525" stroke="#c62828" stroke-width="2" marker-end="url(#r)" fill="none"/>
+  <text x="360" y="518" text-anchor="middle" font-size="11" fill="#c62828">no</text>
+  <rect x="70" y="503" width="240" height="44" rx="8" fill="#fef2f2" stroke="#c62828" stroke-width="1.5"/>
+  <text x="190" y="530" text-anchor="middle" font-size="12" fill="#c62828">400 — "Missing captcha token."</text>
+
+  <!-- yes -> siteverify -->
+  <path d="M500 565 L500 605" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <text x="512" y="590" font-size="11" fill="#1a7f37">yes</text>
+  <rect x="380" y="605" width="240" height="60" rx="8" fill="#fff" stroke="#10b981" stroke-width="1.5"/>
+  <text x="500" y="630" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Call siteverify</text>
+  <text x="500" y="650" text-anchor="middle" font-size="12" fill="#6b7280">{ secret, response, remoteip }</text>
+
+  <path d="M620 635 L690 635" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <rect x="690" y="605" width="240" height="60" rx="8" fill="#fff" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="810" y="630" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Validate token</text>
+  <text x="810" y="650" text-anchor="middle" font-size="12" fill="#6b7280">single-use · ~5 min TTL · secret match</text>
+
+  <!-- back to server -->
+  <path d="M810 665 L810 700 L500 700 L500 725" stroke="#374151" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)" fill="none"/>
+  <text x="660" y="693" text-anchor="middle" font-size="11" fill="#374151">{ success, error-codes }</text>
+
+  <!-- success? -->
+  <polygon points="500,725 590,765 500,805 410,765" fill="#fff" stroke="#10b981" stroke-width="1.5"/>
+  <text x="500" y="770" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">success?</text>
+
+  <!-- no -> 403 -->
+  <path d="M410 765 L310 765" stroke="#c62828" stroke-width="2" marker-end="url(#r)" fill="none"/>
+  <text x="360" y="758" text-anchor="middle" font-size="11" fill="#c62828">no</text>
+  <rect x="70" y="743" width="240" height="44" rx="8" fill="#fef2f2" stroke="#c62828" stroke-width="1.5"/>
+  <text x="190" y="770" text-anchor="middle" font-size="12" fill="#c62828">403 — "Captcha verification failed: …"</text>
+
+  <!-- yes -> process -->
+  <path d="M500 805 L500 840" stroke="#1a7f37" stroke-width="2" marker-end="url(#g)" fill="none"/>
+  <text x="512" y="828" font-size="11" fill="#1a7f37">yes</text>
+  <rect x="380" y="840" width="240" height="60" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="500" y="865" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Process submission</text>
+  <text x="500" y="885" text-anchor="middle" font-size="11" fill="#6b7280">200 — "Thanks! Message received."</text>
+
+  <path d="M380 870 L310 870" stroke="#1a7f37" stroke-width="2" marker-end="url(#g)" fill="none"/>
+  <rect x="70" y="848" width="240" height="44" rx="8" fill="#f0fdf4" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="190" y="875" text-anchor="middle" font-size="12" fill="#1a7f37">Show success message</text>
+
+  <!-- finally: reset -->
+  <path d="M190 892 L190 930" stroke="#374151" stroke-width="2" marker-end="url(#a)" fill="none"/>
+  <path d="M190 787 L190 848" stroke="#374151" stroke-width="2" fill="none"/>
+  <path d="M190 547 L190 743" stroke="#374151" stroke-width="2" fill="none" stroke-dasharray="6 4"/>
+  <rect x="70" y="930" width="240" height="60" rx="8" fill="#fff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="190" y="955" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">finally: setToken(null) + reset()</text>
+  <text x="190" y="975" text-anchor="middle" font-size="12" fill="#6b7280">widget fetches a fresh token silently</text>
+
+  <text x="500" y="1022" text-anchor="middle" font-size="11" fill="#6b7280">Every response path (400 / 403 / 200) ends in the reset step — Turnstile tokens are single-use.</text>
+</svg>

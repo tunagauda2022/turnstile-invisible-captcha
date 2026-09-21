@@ -24,6 +24,10 @@ Without a `.env`, Cloudflare's test keys are used (always pass, no real challeng
 
 ![Architecture diagram](docs/architecture.svg)
 
+### Request flow
+
+![Flow diagram](docs/flow.svg)
+
 ## How it works
 
 - `src/App.tsx` renders `<Turnstile size="invisible">` from `@marsidev/react-turnstile`.
