@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f6821f"/></marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f9fafb"/>
+  <text x="600" y="44" text-anchor="middle" font-size="22" font-weight="700" fill="#111827">React + Cloudflare Turnstile (Invisible Captcha) — Architecture</text>
+
+  <!-- Column 1: Browser -->
+  <rect x="40" y="90" width="340" height="420" rx="14" fill="#fff" stroke="#d1d5db" stroke-width="2"/>
+  <text x="60" y="120" font-size="16" font-weight="700" fill="#111827">Browser</text>
+  <text x="60" y="140" font-size="12" fill="#6b7280">Vite dev server · http://localhost:5173</text>
+
+  <rect x="60" y="160" width="300" height="150" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="76" y="185" font-size="14" font-weight="600" fill="#3730a3">React App — src/App.tsx</text>
+  <text x="76" y="210" font-size="12" fill="#374151">• Contact form (email, message)</text>
+  <text x="76" y="230" font-size="12" fill="#374151">• Submit disabled until token exists</text>
+  <text x="76" y="250" font-size="12" fill="#374151">• POST /api/submit {email, message, token}</text>
+  <text x="76" y="270" font-size="12" fill="#374151">• reset() widget after each submit</text>
+  <text x="76" y="290" font-size="12" fill="#374151">• Shows success / error message</text>
+
+  <rect x="60" y="340" width="300" height="150" rx="10" fill="#fff7ed" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="76" y="365" font-size="14" font-weight="600" fill="#9a3412">&lt;Turnstile size="invisible" /&gt;</text>
+  <text x="76" y="383" font-size="11" fill="#9a3412">@marsidev/react-turnstile</text>
+  <text x="76" y="408" font-size="12" fill="#374151">• Loads Turnstile api.js script</text>
+  <text x="76" y="428" font-size="12" fill="#374151">• Solves challenge silently on mount</text>
+  <text x="76" y="448" font-size="12" fill="#374151">• onSuccess(token) → setToken</text>
+  <text x="76" y="468" font-size="12" fill="#374151">• onExpire → reset · onError → message</text>
+
+  <!-- internal arrow widget -> app -->
+  <path d="M 210 340 L 210 310" fill="none" stroke="#f6821f" stroke-width="2" marker-end="url(#o)"/>
+  <text x="222" y="330" font-size="11" fill="#9a3412">token</text>
+
+  <!-- Column 2: Server -->
+  <rect x="430" y="90" width="340" height="420" rx="14" fill="#fff" stroke="#d1d5db" stroke-width="2"/>
+  <text x="450" y="120" font-size="16" font-weight="700" fill="#111827">Backend</text>
+  <text x="450" y="140" font-size="12" fill="#6b7280">Express · http://localhost:3001</text>
+
+  <rect x="450" y="160" width="300" height="200" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="466" y="185" font-size="14" font-weight="600" fill="#065f46">server/index.ts — POST /api/submit</text>
+  <text x="466" y="212" font-size="12" fill="#374151">1. Reject if token missing → 400</text>
+  <text x="466" y="232" font-size="12" fill="#374151">2. Call siteverify with</text>
+  <text x="482" y="250" font-size="12" fill="#374151">{ secret, response: token, remoteip }</text>
+  <text x="466" y="272" font-size="12" fill="#374151">3. success = false → 403 + error-codes</text>
+  <text x="466" y="292" font-size="12" fill="#374151">4. success = true → handle form → 200</text>
+  <text x="466" y="320" font-size="12" fill="#374151">Env: TURNSTILE_SECRET_KEY</text>
+  <text x="466" y="338" font-size="11" fill="#6b7280">(never shipped to the browser)</text>
+
+  <rect x="450" y="390" width="300" height="100" rx="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="466" y="415" font-size="14" font-weight="600" fill="#374151">Dev proxy — vite.config.ts</text>
+  <text x="466" y="440" font-size="12" fill="#374151">server.proxy['/api'] → localhost:3001</text>
+  <text x="466" y="460" font-size="12" fill="#374151">Same-origin fetch from the SPA,</text>
+  <text x="466" y="478" font-size="12" fill="#374151">no CORS in development</text>
+
+  <!-- Column 3: Cloudflare -->
+  <rect x="820" y="90" width="340" height="420" rx="14" fill="#fff" stroke="#f6821f" stroke-width="2"/>
+  <text x="840" y="120" font-size="16" font-weight="700" fill="#111827">Cloudflare Turnstile</text>
+  <text x="840" y="140" font-size="12" fill="#6b7280">challenges.cloudflare.com</text>
+
+  <rect x="840" y="160" width="300" height="130" rx="10" fill="#fff7ed" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="856" y="185" font-size="14" font-weight="600" fill="#9a3412">Widget / challenge API</text>
+  <text x="856" y="210" font-size="12" fill="#374151">/turnstile/v0/api.js</text>
+  <text x="856" y="230" font-size="12" fill="#374151">Uses public site key</text>
+  <text x="856" y="250" font-size="12" fill="#374151">Widget Mode: Invisible (dashboard)</text>
+  <text x="856" y="270" font-size="12" fill="#374151">Issues short-lived, single-use token</text>
+
+  <rect x="840" y="320" width="300" height="110" rx="10" fill="#fff7ed" stroke="#f6821f" stroke-width="1.5"/>
+  <text x="856" y="345" font-size="14" font-weight="600" fill="#9a3412">Siteverify API</text>
+  <text x="856" y="370" font-size="12" fill="#374151">POST /turnstile/v0/siteverify</text>
+  <text x="856" y="390" font-size="12" fill="#374151">Requires secret key</text>
+  <text x="856" y="410" font-size="12" fill="#374151">Returns { success, error-codes, … }</text>
+
+  <rect x="840" y="450" width="300" height="40" rx="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="856" y="475" font-size="12" fill="#374151">Dev: 1x0000…AA test keys always pass</text>
+
+  <!-- Cross-column arrows -->
+  <!-- 1: widget -> challenge API (goes under server box) -->
+  <path d="M 360 415 L 400 415 L 400 560 L 800 560 L 800 225 L 840 225" fill="none" stroke="#f6821f" stroke-width="2" marker-end="url(#o)"/>
+  <circle cx="600" cy="560" r="13" fill="#f6821f"/><text x="600" y="564" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">1</text>
+  <text x="600" y="590" text-anchor="middle" font-size="11" fill="#9a3412">invisible challenge  ⇄  token (2)</text>
+
+  <!-- 3: app -> API -->
+  <path d="M 360 230 L 450 230" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <circle cx="405" cy="215" r="13" fill="#374151"/><text x="405" y="219" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">3</text>
+
+  <!-- 6: API -> app response -->
+  <path d="M 450 270 L 360 270" fill="none" stroke="#374151" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <circle cx="405" cy="288" r="13" fill="#374151"/><text x="405" y="292" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">6</text>
+
+  <!-- 4: API -> siteverify -->
+  <path d="M 750 250 L 840 355" fill="none" stroke="#374151" stroke-width="2" marker-end="url(#a)"/>
+  <circle cx="780" cy="280" r="13" fill="#374151"/><text x="780" y="284" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">4</text>
+
+  <!-- 5: siteverify -> API -->
+  <path d="M 840 395 L 750 300" fill="none" stroke="#374151" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <circle cx="815" cy="370" r="13" fill="#374151"/><text x="815" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">5</text>
+
+  <!-- Legend / flow -->
+  <rect x="40" y="610" width="1120" height="90" rx="14" fill="#fff" stroke="#d1d5db" stroke-width="2"/>
+  <text x="60" y="636" font-size="13" fill="#374151"><tspan font-weight="700">1–2</tspan>  Widget silently solves the challenge on mount; React stores the token and enables Submit.</text>
+  <text x="60" y="658" font-size="13" fill="#374151"><tspan font-weight="700">3</tspan>  User submits; the form payload + token is POSTed to /api/submit.   <tspan font-weight="700">4–5</tspan>  Server verifies the token with the secret key.</text>
+  <text x="60" y="680" font-size="13" fill="#374151"><tspan font-weight="700">6</tspan>  Server responds 200 (verified) or 403 (rejected); the widget is reset so the next submit gets a fresh token.</text>
+  <line x1="900" y1="676" x2="935" y2="676" stroke="#374151" stroke-width="2"/><text x="940" y="680" font-size="11" fill="#6b7280">request</text>
+  <line x1="995" y1="676" x2="1030" y2="676" stroke="#374151" stroke-width="2" stroke-dasharray="6 4"/><text x="1035" y="680" font-size="11" fill="#6b7280">response</text>
+  <line x1="1095" y1="676" x2="1130" y2="676" stroke="#f6821f" stroke-width="2"/><text x="1135" y="680" font-size="11" fill="#6b7280">CF</text>
+</svg>
