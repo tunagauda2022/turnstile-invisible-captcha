@@ -20,6 +20,8 @@ Without a `.env`, Cloudflare's test keys are used (always pass, no real challeng
 2. Set **Widget Mode** to *Invisible* and add your hostname(s) (`localhost` for dev).
 3. Put the site key in `VITE_TURNSTILE_SITE_KEY` and the secret in `TURNSTILE_SECRET_KEY`.
 
+See the full [solution document](docs/SOLUTION.md).
+
 ## Architecture
 
 ![Architecture diagram](docs/architecture.svg)
